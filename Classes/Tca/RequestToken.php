@@ -87,9 +87,14 @@ class RequestToken {
 	protected function getConfiguration() {
 		$flexformConfiguration = array();
 		if (isset($this->parentArray['row']) && isset($this->parentArray['row']['configuration'])) {
-			$flexformConfiguration = GeneralUtility::xml2array(
-				$this->parentArray['row']['configuration']
-			);
+			if (!is_array($this->parentArray['row']['configuration'])) {
+				$flexformConfiguration = GeneralUtility::xml2array(
+					$this->parentArray['row']['configuration']
+				);
+			} else {
+				$flexformConfiguration = $this->parentArray['row']['configuration'];
+
+			}
 			$flexformConfiguration = $flexformConfiguration['data']['sDEF']['lDEF'];
 		}
 
@@ -107,7 +112,7 @@ class RequestToken {
 	 * @param \TYPO3\CMS\Backend\Form\FormEngine $formEngine
 	 * @return string
 	 */
-	public function getRequestToken($parentArray, \TYPO3\CMS\Backend\Form\FormEngine $formEngine) {
+	public function getRequestToken($parentArray) {
 		$this->initialize($parentArray);
 
 		if ($this->appInfo instanceof AppInfo) {
